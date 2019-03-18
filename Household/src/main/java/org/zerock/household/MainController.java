@@ -1,6 +1,7 @@
 package org.zerock.household;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 import javax.mail.MessagingException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zerock.domain.EmailVO;
+import org.zerock.domain.HomeVO;
 import org.zerock.domain.HouseholdVO;
 import org.zerock.domain.MailHandler;
 import org.zerock.domain.MemberVO;
@@ -34,9 +36,15 @@ public class MainController {
 	@Autowired
     private JavaMailSender mailSender;
 	
+	@GetMapping("/main")
+	public String mainform() {
+		logger.info("메인화면으로 이동");
+		return "main/main";
+	}
+	
 	@GetMapping("/index")
 	public String index() {
-		logger.info("메인화면으로 이동");
+		logger.info("인덱스화면으로 이동");
 		return "main/index";
 	}
 	
@@ -50,6 +58,12 @@ public class MainController {
 	public String signupform() {
 		logger.info("회원가입으로 이동");
 		return "main/signup";
+	}
+	
+	@GetMapping("/chart")
+	public String chartform() {
+		logger.info("차트화면으로 이동");
+		return "chart/chart";
 	}
 	
 	@PostMapping("/signup")
@@ -162,5 +176,18 @@ public class MainController {
 	public @ResponseBody String incomeInsert(HouseholdVO vo) {
 		service.incomeInsert(vo);
 		return "1";
+	}
+	
+	@GetMapping("/chartForm")
+	public String chartForm(HomeVO vo, Model model) {
+		Calendar cal = Calendar.getInstance();
+		vo.setMonth(String.valueOf(cal.get(cal.MONTH)+1));
+		if(cal.get(cal.MONTH)+1 < 10) {
+			vo.setMonth("0".concat(vo.getMonth()));
+		}
+		System.out.println(vo.getMonth());
+		HomeVO hvo = service.homegetData(vo);
+		model.addAttribute("hvo", hvo);
+		return "chart/chart";
 	}
 }

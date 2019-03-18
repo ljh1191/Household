@@ -50,4 +50,32 @@
 	select * from household where membernum = #{membernum}
 </select>
 
+<select id="getIncome" parameterType="org.zerock.domain.HouseholdVO" resultType="int">
+	select sum(money) from household where SUBSTR(regdate,6,2) = #{month} and membernum = #{membernum} GROUP BY category having category = '수입'
+</select>
+
+<select id="getDx" parameterType="org.zerock.domain.HouseholdVO" resultType="int">
+	select sum(money) from household where SUBSTR(regdate,6,2) = #{month} and membernum = #{membernum} GROUP BY category having category = '지출'
+</select>
+
+<select id="getMonthincome" parameterType = "org.zerock.domain.HouseholdVO" resultType="int">
+	select sum(money) from household where SUBSTR(regdate,6,2) = #{month} and membernum = #{membernum} and category = '지출'
+</select>
+
+<select id="pieRank" parameterType="org.zerock.domain.HouseholdVO" resultType="org.zerock.domain.HouseholdVO">
+	<![CDATA[
+	select rank1, division, money from (select rank() OVER (ORDER BY sum(money) DESC) as rank1, 
+	division, sum(money) money from household where SUBSTR(regdate,6,2) = #{month} and category = '지출' and membernum = #{membernum} group by division) 
+	where rank1 <= 3
+	]]>
+</select>
+
+<select id="barRank" parameterType="org.zerock.domain.HouseholdVO" resultType="org.zerock.domain.HouseholdVO">
+	<![CDATA[
+	select rank1, division, money from (select rank() OVER (ORDER BY sum(money) DESC) as rank1, 
+	division, sum(money) money from household where SUBSTR(regdate,6,2) = #{month} and category = '지출' and membernum = #{membernum} group by division) 
+	where rank1 <= 5
+	]]>
+</select>
+
  </mapper>

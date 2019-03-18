@@ -1,9 +1,11 @@
 package org.zerock.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.zerock.domain.EmailVO;
+import org.zerock.domain.HomeVO;
 import org.zerock.domain.HouseholdVO;
 import org.zerock.domain.MemberVO;
 
@@ -20,4 +22,9 @@ public interface MainMapper {
 	public void passupdate(@Param("num") int num, @Param("pwd") String pwd);
 	public void incomeInsert(HouseholdVO vo);
 	public List<HouseholdVO> tableList(int membernum);
+	public int getIncome(HomeVO vo);
+	public int getDx(HomeVO vo);
+	public int getMonthincome(HomeVO vo);
+	public ArrayList<HouseholdVO> pieRank(HomeVO vo);
+	public ArrayList<HouseholdVO> barRank(HomeVO vo);
 }

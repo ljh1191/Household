@@ -3,6 +3,7 @@ package org.zerock.service;
 import java.util.List;
 
 import org.zerock.domain.EmailVO;
+import org.zerock.domain.HomeVO;
 import org.zerock.domain.HouseholdVO;
 import org.zerock.domain.MemberVO;
 
@@ -29,4 +30,8 @@ public interface MainService {
 	public void incomeInsert(HouseholdVO vo);
 	//테이블 리스트
 	public List<HouseholdVO> tableList(int membernum);
+	
+	//home 데이터추출
+	public HomeVO homegetData(HomeVO vo);
+	
 }
