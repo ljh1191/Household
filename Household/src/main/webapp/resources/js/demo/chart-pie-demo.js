@@ -7,9 +7,9 @@ var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["aadd", "Referral", "Social"],
+    labels: [$("#pie_division0").val(), $("#pie_division1").val(), $("#pie_division2").val()],
     datasets: [{
-      data: [55, 30, 15],
+      data: [$("#pie_money0").val(), $("#pie_money1").val(), $("#pie_money2").val()],
       backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
       hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",

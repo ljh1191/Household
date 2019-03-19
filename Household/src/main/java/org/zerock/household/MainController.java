@@ -181,13 +181,21 @@ public class MainController {
 	@GetMapping("/chartForm")
 	public String chartForm(HomeVO vo, Model model) {
 		Calendar cal = Calendar.getInstance();
-		vo.setMonth(String.valueOf(cal.get(cal.MONTH)+1));
-		if(cal.get(cal.MONTH)+1 < 10) {
-			vo.setMonth("0".concat(vo.getMonth()));
+		String nowmon = String.valueOf(cal.get(cal.MONTH)+1);
+		vo.setNowmonth(nowmon);
+		if(vo.getMembernum() == 0) {
+			index();
 		}
-		System.out.println(vo.getMonth());
+		if(vo.getMonth() == null) {
+			vo.setMonth(nowmon);
+			if(cal.get(cal.MONTH)+1 < 10) {
+				vo.setMonth("0".concat(vo.getMonth()));
+			}
+		}
 		HomeVO hvo = service.homegetData(vo);
 		model.addAttribute("hvo", hvo);
+		model.addAttribute("nowmon", nowmon);
+		model.addAttribute("selectmon", Integer.parseInt(vo.getMonth()));
 		return "chart/chart";
 	}
 }

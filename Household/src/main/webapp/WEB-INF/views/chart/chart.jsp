@@ -5,84 +5,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript">
-    function dropdownBtn(gubun){
-    	$("#division").val(gubun);
-    	$("#dropdownBtn").text(gubun);
-    }
-    function incomInsert(){
-    	if($("#membernum").val() == ""){
-    		alert("로그인 후 이용해주세요.");
-    		location.href = "/household/main/loginform";
-    	}else{
-    		if($("#category").text() == ""){
-	    		alert("카테고리를 선택해주세요.");
-	    		return false;
-	    	}
-    		if($("#division").val() == ""){
-	    		alert("구분을 선택해주세요.");
-	    		return false;
-	    	}
-	    	if($("#money").val() == ""){
-	    		alert("잔액을 입력해주세요.");
-	    		return false;
-	    	}
-	    	if($("#regdate").val() == ""){
-	    		alert("날짜를 선택해주세요.");
-	    		return false;
-	    	}
-	    	$.ajax({
-              		type : "post",
-              		url : "/household/main/incomeInsert",
-              		data : {"division":$("#division").val(),"membernum":$("#membernum").val(),"content":$("#content").val(),"money":$("#money").val(),"regdate":$("#regdate").val(),"category":$("#category").text()},
-              		success:function(data){
-              			if(data == 1){
-              				alert("입력되었습니다.");
-              				location.href = "/household/main/index";
-              			}
-              		},
-              		error : function(e){
-					alert("error :"+e);
-				}
-              		
-              	});
-    	}
-    }
-    function categoryBtn(category){
-    	var income = "<button class='btn btn-primary dropdown-toggle' id='dropdownBtn' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
-	    +"<br><br>"
-	    +"<ul class='dropdown-menu'>"
-	      +"<li><a href=javascript:dropdownBtn('월급')>월급</a></li>"
-	      +"<li><a href=javascript:dropdownBtn('용돈')>용돈</a></li>"
-	      +"<li><a href=javascript:dropdownBtn('이월')>이월</a></li>"
-	      +"<li><a href=javascript:dropdownBtn('기타')>기타</a></li>"
-	    +"</ul>";
-	    var expenditure = "<button class='btn btn-primary dropdown-toggle' id='dropdownBtn' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
-		    +"<br><br>"
-		    +"<ul class='dropdown-menu'>"
-		      +"<li><a href=javascript:dropdownBtn('식비')>식비</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('교통비')>교통비</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('문화생활')>문화생활</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('생필품')>생필품</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('쇼핑')>쇼핑</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('의료')>의료</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('교육')>교육</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('통신비')>통신비</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('회비')>회비</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('경조사')>경조사</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('저축')>저축</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('공과금')>공과금</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('카드대금')>카드대금</a></li>"
-		      +"<li><a href=javascript:dropdownBtn('기타')>기타</a></li>"
-		    +"</ul>";
-    	$("#category").text(category);
-    	if(category == "수입"){
-    		$("#dropdownCa").html(income);
-    	}else if(category == "지출"){
-    		$("#dropdownCa").html(expenditure);
-    	}
-    }
-    </script>
+<script>
+function mondropdownBtn(num){
+	$("#dropdownMonButton").html(num+"월");
+	var str = "";
+	if(num < 10){
+		str = ("0"+num);
+	}else{
+		str = (""+num);
+	}
+	
+	location.href = "/household/main/chartForm?membernum="+$("#membernum").val()+"&month="+str;
+}
+</script>
 
 <jsp:include page="../include/header.jsp"/>
 
@@ -108,8 +43,17 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+          <input type = "hidden" id = "nowmon" name = "nowmon" value = "${selectmon}">
+            <div class="dropdown mb-4">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMonButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      ${selectmon }월
+                    </button>
+                    <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMonButton">
+                    	<c:forEach begin="1" end="${nowmon }" varStatus="stat">
+                    		<a class="dropdown-item" href="javascript:mondropdownBtn(${stat.index })">${stat.index }월</a>
+                    	</c:forEach>
+                    </div>
+            </div>
           </div>
 
           <!-- Content Row -->
@@ -203,7 +147,7 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">월별 지출 현황(1월~${nowmon }월)</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -220,6 +164,12 @@
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area">
+                  		<c:forEach begin="0" end="${nowmon-1}" varStatus="stat">
+                  			<input type = "hidden" id="area${stat.index}" name="area${stat.index}" value="${hvo.mon_area_incom[stat.index]}"> 
+                  		 </c:forEach>
+	                    <c:forEach begin="${nowmon}" end="11" varStatus="stat">
+	                    <input type = "hidden" id="area${stat.index}" name="area${stat.index}" value="0">
+	                  	</c:forEach>
                     <canvas id="myAreaChart"></canvas>
                   </div>
                 </div>
@@ -231,7 +181,7 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">${selectmon}월 상위 지출 내역</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -248,17 +198,23 @@
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2">
+                  	<c:forEach begin="0" end="2" varStatus="stat">
+                  			<input type = "hidden" id="pie_money${stat.index}" name="pie_money${stat.index}" value="${hvo.mon_pie_incom.get(stat.index).money}"> 
+               		 </c:forEach>
+               		 <c:forEach begin="0" end="2" varStatus="stat">
+                  			<input type = "hidden" id="pie_division${stat.index}" name="pie_division${stat.index}" value="${hvo.mon_pie_incom.get(stat.index).division}"> 
+               		 </c:forEach>
                     <canvas id="myPieChart"></canvas>
                   </div>
                   <div class="mt-4 text-center small">
                     <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
+                      <i class="fas fa-circle text-primary"></i> ${hvo.mon_pie_incom.get(0).division}
                     </span>
                     <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Social
+                      <i class="fas fa-circle text-success"></i> ${hvo.mon_pie_incom.get(1).division}
                     </span>
                     <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Referral
+                      <i class="fas fa-circle text-info"></i> ${hvo.mon_pie_incom.get(2).division}
                     </span>
                   </div>
                 </div>
@@ -275,84 +231,75 @@
               <!-- Project Card Example -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">지출 순위</h6>
                 </div>
                 <div class="card-body">
-                  <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
+                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(0).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(0).money/hvo.mon_incom}" type="percent"/></span></h4>
                   <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(0).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
-                  <h4 class="small font-weight-bold">Sales Tracking <span class="float-right">40%</span></h4>
+                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(1).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(1).money/hvo.mon_incom}" type="percent"/></span></h4>
                   <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(1).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
-                  <h4 class="small font-weight-bold">Customer Database <span class="float-right">60%</span></h4>
+                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(2).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(2).money/hvo.mon_incom}" type="percent"/></span></h4>
                   <div class="progress mb-4">
-                    <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(2).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
-                  <h4 class="small font-weight-bold">Payout Details <span class="float-right">80%</span></h4>
+                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(3).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(3).money/hvo.mon_incom}" type="percent"/></span></h4>
                   <div class="progress mb-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(3).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
-                  <h4 class="small font-weight-bold">Account Setup <span class="float-right">Complete!</span></h4>
+                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(4).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(4).money/hvo.mon_incom}" type="percent"/></span></h4>
                   <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(4).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
               </div>
 
               <!-- Color System -->
               <div class="row">
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-primary text-white shadow">
+              <div class="col-lg-6 mb-4">
+                  <div class="card bg-danger text-white shadow">
                     <div class="card-body">
-                      Primary
-                      <div class="text-white-50 small">#4e73df</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-success text-white shadow">
-                    <div class="card-body">
-                      Success
-                      <div class="text-white-50 small">#1cc88a</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-info text-white shadow">
-                    <div class="card-body">
-                      Info
-                      <div class="text-white-50 small">#36b9cc</div>
+                      ${hvo.mon_bar_incom.get(0).division}
+                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(0).money}" pattern="#,###" />원</div>
                     </div>
                   </div>
                 </div>
                 <div class="col-lg-6 mb-4">
                   <div class="card bg-warning text-white shadow">
                     <div class="card-body">
-                      Warning
-                      <div class="text-white-50 small">#f6c23e</div>
+                      ${hvo.mon_bar_incom.get(1).division}
+                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(1).money}" pattern="#,###" />원</div>
                     </div>
                   </div>
                 </div>
                 <div class="col-lg-6 mb-4">
-                  <div class="card bg-danger text-white shadow">
+                  <div class="card bg-primary text-white shadow">
                     <div class="card-body">
-                      Danger
-                      <div class="text-white-50 small">#e74a3b</div>
+                      ${hvo.mon_bar_incom.get(2).division}
+                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(2).money}" pattern="#,###" />원</div>
                     </div>
                   </div>
                 </div>
                 <div class="col-lg-6 mb-4">
-                  <div class="card bg-secondary text-white shadow">
+                  <div class="card bg-info text-white shadow">
                     <div class="card-body">
-                      Secondary
-                      <div class="text-white-50 small">#858796</div>
+                      ${hvo.mon_bar_incom.get(3).division}
+                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(3).money}" pattern="#,###" />원</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <div class="card bg-success text-white shadow">
+                    <div class="card-body">
+                      ${hvo.mon_bar_incom.get(4).division}
+                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(4).money}" pattern="#,###" />원</div>
                     </div>
                   </div>
                 </div>
               </div>
-
             </div>
 
             <div class="col-lg-6 mb-4">

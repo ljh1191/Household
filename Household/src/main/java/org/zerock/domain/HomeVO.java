@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class HomeVO {
 	private String month;
+	private String nowmonth;
 	private int membernum;
 	private int mon_incom;
 	private int mon_dx;
@@ -52,6 +53,12 @@ public class HomeVO {
 	}
 	public void setMembernum(int membernum) {
 		this.membernum = membernum;
+	}
+	public String getNowmonth() {
+		return nowmonth;
+	}
+	public void setNowmonth(String nowmonth) {
+		this.nowmonth = nowmonth;
 	}
 	
 }

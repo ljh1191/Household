@@ -1,6 +1,7 @@
 package org.zerock.mapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +25,7 @@ public interface MainMapper {
 	public List<HouseholdVO> tableList(int membernum);
 	public int getIncome(HomeVO vo);
 	public int getDx(HomeVO vo);
-	public int getMonthincome(HomeVO vo);
+	public int getMonthincome(HashMap<String, Object> hm);
 	public ArrayList<HouseholdVO> pieRank(HomeVO vo);
 	public ArrayList<HouseholdVO> barRank(HomeVO vo);
 }

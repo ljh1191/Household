@@ -1,6 +1,7 @@
 package org.zerock.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -111,38 +112,38 @@ public class MainServiceImpl implements MainService{
 		// TODO Auto-generated method stub
 		vo.setMon_incom(mapper.getIncome(vo));
 		vo.setMon_dx(mapper.getDx(vo));
-		
-		int mon_num = Integer.parseInt(vo.getMonth());
-		
+		System.out.println("서비스 회원번호 : "+vo.getMembernum());
+		int nowmon_num = Integer.parseInt(vo.getNowmonth());
+		System.out.println("mon_num : "+nowmon_num);
 		//해당월까지의 배열생성
-		String[] mon = new String[mon_num];
-		for (int i = 1; i <= mon_num; i++) {
+		String[] mon = new String[nowmon_num];
+		for (int i = 1; i <= nowmon_num; i++) {
 			if(i < 10) {
 				mon[i-1] = "0".concat(String.valueOf(i));
 			}else {
 				mon[i-1] = String.valueOf(i);
+				
 			}
 		}
+		HashMap<String, Object> hm = new HashMap<String, Object>();
+		hm.put("membernum", vo.getMembernum());
 		//해당월까지 지출 배열에 넣음
 		int[] mon_income = new int[mon.length];
+		
 		for (int i = 0; i < mon.length; i++) {
-			mon_income[i] = mapper.getMonthincome(vo);;
+			hm.put("mon", mon[i]);
+			mon_income[i] = mapper.getMonthincome(hm);
 		}
 		vo.setMon_area_incom(mon_income);
-		
-		ArrayList<HouseholdVO> arr = mapper.pieRank(vo);
-		//pie chart 데이터
-		for (int i = 0; i < arr.size(); i++) {
-			System.out.println(arr.get(i).getDivision());
-			System.out.println(arr.get(i).getMoney());
+		for (int i = 0; i < mon_income.length; i++) {
+			System.out.println("월별 지출 결과값 : "+mon_income[i]);
 		}
+		//pie chart 데이터
+		ArrayList<HouseholdVO> arr = mapper.pieRank(vo);
 		vo.setMon_pie_incom(arr);
 		//bar chart 데이터
 		ArrayList<HouseholdVO> arr2 = mapper.barRank(vo);
-		for (int i = 0; i < arr2.size(); i++) {
-			System.out.println(arr2.get(i).getDivision());
-			System.out.println(arr2.get(i).getMoney());
-		}
+		
 		vo.setMon_bar_incom(arr2);
 		return vo;
 	}

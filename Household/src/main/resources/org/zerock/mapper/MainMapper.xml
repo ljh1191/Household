@@ -43,7 +43,7 @@
 </update>
 
 <insert id="incomeInsert" parameterType="org.zerock.domain.HouseholdVO">
-	insert into household(num,membernum,division,money,regdate,content,category) values(income_seq.nextval,#{membernum},#{division},#{money},#{regdate},#{content},#{category})
+	insert into household(num,membernum,division,money,regdate,content,category) values(HOUSEHOLD_SEQ.nextval,#{membernum},#{division},#{money},#{regdate},#{content},#{category})
 </insert>
 
 <select id="tableList" parameterType="int" resultType="org.zerock.domain.HouseholdVO">
@@ -58,8 +58,8 @@
 	select sum(money) from household where SUBSTR(regdate,6,2) = #{month} and membernum = #{membernum} GROUP BY category having category = '지출'
 </select>
 
-<select id="getMonthincome" parameterType = "org.zerock.domain.HouseholdVO" resultType="int">
-	select sum(money) from household where SUBSTR(regdate,6,2) = #{month} and membernum = #{membernum} and category = '지출'
+<select id="getMonthincome" parameterType = "Map" resultType="int">
+	select sum(money) from household where SUBSTR(regdate,6,2) = ${mon} and membernum =  ${membernum} and category = '지출'
 </select>
 
 <select id="pieRank" parameterType="org.zerock.domain.HouseholdVO" resultType="org.zerock.domain.HouseholdVO">
