@@ -28,4 +28,6 @@ public interface MainMapper {
 	public int getMonthincome(HashMap<String, Object> hm);
 	public ArrayList<HouseholdVO> pieRank(HomeVO vo);
 	public ArrayList<HouseholdVO> barRank(HomeVO vo);
+	public void viewUpdate(HouseholdVO vo);
+	public void viewDelete(HouseholdVO vo);
 }

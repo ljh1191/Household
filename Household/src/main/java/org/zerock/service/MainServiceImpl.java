@@ -148,4 +148,16 @@ public class MainServiceImpl implements MainService{
 		return vo;
 	}
 
+	@Override
+	public void viewUpdate(HouseholdVO vo) {
+		// TODO Auto-generated method stub
+		mapper.viewUpdate(vo);
+	}
+
+	@Override
+	public void viewDelete(HouseholdVO vo) {
+		// TODO Auto-generated method stub
+		mapper.viewDelete(vo);
+	}
+
 }

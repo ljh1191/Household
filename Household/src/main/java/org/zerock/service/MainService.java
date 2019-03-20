@@ -33,5 +33,8 @@ public interface MainService {
 	
 	//home 데이터추출
 	public HomeVO homegetData(HomeVO vo);
-	
+	//tablelist 수정
+	public void viewUpdate(HouseholdVO vo);
+	//tablelist 삭제
+	public void viewDelete(HouseholdVO vo);
 }

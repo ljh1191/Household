@@ -78,4 +78,11 @@
 	]]>
 </select>
 
+<update id="viewUpdate" parameterType="org.zerock.domain.HouseholdVO">
+	update household set division = #{division}, money = #{money}, regdate = #{regdate}, content = #{content}, category = #{category} where num = #{num}
+</update>
+
+<delete id="viewDelete" parameterType="org.zerock.domain.HouseholdVO">
+	delete from household where num = #{num}
+</delete>
  </mapper>

@@ -9,7 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.zerock.domain.HouseholdVO;
 import org.zerock.service.MainService;
 
@@ -27,5 +30,18 @@ public class TableController {
 		mo.addAttribute("list", list);
 		logger.info("테이블로 이동");
 		return "/table/list";
+	}
+	
+	@PostMapping("/viewUpdate")
+	public @ResponseBody String viewUpdate(HouseholdVO vo) {
+		System.out.println(vo.getNum());
+		service.viewUpdate(vo);
+		return "1";
+	}
+	
+	@PostMapping("/viewDelete")
+	public @ResponseBody String viewDelete(HouseholdVO vo) {
+		service.viewDelete(vo);
+		return "1";
 	}
 }

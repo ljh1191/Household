@@ -95,7 +95,18 @@
     		$("#dropdownCa").html(expenditure);
     	}
     }
-    
+    function writeBtn(obj){
+    	$("#"+obj).attr("data-toggle","modal");
+    	$("#"+obj).attr("data-target","#inModal");
+    	$("#"+obj).click();
+    }
+    $(document).ready(function(){
+    	$('#inModal').on('hidden.bs.modal', function (e) {
+    	    	$("#category").text("");
+    	    	$("#dropdownBtn").css("display","none");
+   	    });
+    })
+  
     </script>
 
 <!-- Sidebar -->
@@ -121,7 +132,7 @@
 
 		<hr class="sidebar-divider">
 		<li class="nav-item active">
-		<a class="nav-link" href="#" data-toggle="modal" data-target="#inModal">
+		<a class="nav-link" id = "awrite" href="javascript:writeBtn('awrite')">
           <span>가계부 작성</span></a>
 	    </li>
       	<li class="nav-item active">
@@ -129,12 +140,13 @@
 		  <!-- Trigger the modal with a button -->
         
 		  <!-- Modal -->
-		  <form id = "incomefrm" name = "incomefrm">
 		  <div class="modal income" id="inModal" role="dialog">
+		  <form id = "writemodal" name = "writemodal">
 		    <div class="modal-dialog">
 		    
 		      <!-- Modal content-->
 		      <div class="modal-content">
+		      
 		        <div class="modal-header">
 <!-- 		          <button type="button" class="close" data-dismiss="modal">&times;</button> -->
                     <nav class="navbar navbar-expand navbar-light bg-light mb-4" style="width: 100%">
@@ -161,7 +173,7 @@
 				  </div>
 				  <input type="text" class="form-control form-control-user" id="content" name="content" aria-describedby="emailHelp" placeholder="내용...">
 				  <br>
-		          <input type="text" class="form-control form-control-user" id="money" name="money" aria-describedby="emailHelp" placeholder="금액..." onkeydown="return comma(event)">
+		          <input type="text" class="form-control form-control-user" id="money" name="money" aria-describedby="emailHelp" placeholder="금액...">
 		          <br>
 		          <input type="date" class="form-control form-control-user" id="regdate" name="regdate" aria-describedby="emailHelp">
 		          <br>
@@ -175,11 +187,13 @@
                   </a>
 		          <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 		        </div>
+		        
 		      </div>
 		      
 		    </div>
+		    </form>
 		  </div>
-		  </form>
+			<!-- end modal -->
 		  </div>
       </li>
 
