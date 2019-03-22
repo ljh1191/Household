@@ -379,6 +379,9 @@ function mondropdownBtn(num){
   </div>
 
 	<jsp:include page="../include/footer.jsp"></jsp:include>
+	<!-- Page level custom scripts -->
+	  <script src="/household/resources/js/demo/chart-area-demo.js"></script>
+	  <script src="/household/resources/js/demo/chart-pie-demo.js"></script>
 
 </body>
 

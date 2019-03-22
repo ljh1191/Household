@@ -7,7 +7,15 @@
     		alert("로그인 이후 이용가능 합니다.");
     		location.href = "/household/main/loginform";
     	}else{
-    		location.href = "/household/table/tableform?membernum="+$("#membernum").val();
+    		location.href = "/household/table/tableform?membernum="+num;
+    	}
+    }
+    function calendarForm(num){
+    	if(num == null){
+    		alert("로그인 이후 이용가능 합니다.");
+    		location.href = "/household/main/loginform";
+    	}else{
+    		location.href = "/household/main/calendarForm?membernum="+num;
     	}
     }
     function chartForm(num){
@@ -15,7 +23,7 @@
     		alert("로그인 이후 이용가능 합니다.");
     		location.href = "/household/main/loginform";
     	}else{
-    		location.href = "/household/main/chartForm?membernum="+$("#membernum").val();
+    		location.href = "/household/main/chartForm?membernum="+num;
     	}
     }
     
@@ -196,6 +204,10 @@
 			<!-- end modal -->
 		  </div>
       </li>
+	  <li class="nav-item active">
+		<a class="nav-link" id = "calendarSi" href="javascript:calendarForm(${vo.num })">
+          <span>캘린더</span></a>
+	  </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider">

@@ -13,6 +13,4 @@
   <!-- Page level plugins -->
   <script src="/household/resources/vendor/chart.js/Chart.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="/household/resources/js/demo/chart-area-demo.js"></script>
-  <script src="/household/resources/js/demo/chart-pie-demo.js"></script>
+  

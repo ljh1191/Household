@@ -7,12 +7,13 @@
         
 		<c:if test="${vo != null }">
 		<div class="sidebar-brand-text mx-3">
-			<a href="/household/main/logout">로그아웃</a>
+			
+			<a href="/household/main/logout">Logout</a>
 		</div>
 		</c:if>
 		<c:if test="${vo == null }">
 		<div class="sidebar-brand-text mx-3">
-			<a href="/household/main/loginform">로그인</a> | <a href="/household/main/signupform">회원가입</a>
+			<a href="/household/main/loginform">Login</a> | <a href="/household/main/signupform">SignUp</a>
 		</div>
 		</c:if>
 		

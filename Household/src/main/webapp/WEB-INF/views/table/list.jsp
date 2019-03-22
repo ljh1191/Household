@@ -7,84 +7,83 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
 function viewcategoryBtn(category,index){
-	var income = "<button class='btn btn-primary dropdown-toggle' id='viewdropdownBtn' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
+	var income = "<button class='btn btn-primary dropdown-toggle' id='viewdropdownBtn"+index+"' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
     +"<br><br>"
     +"<ul class='dropdown-menu'>"
-      +"<li><a href=javascript:viewdropdownBtn('월급')>월급</a></li>"
-      +"<li><a href=javascript:viewdropdownBtn('용돈')>용돈</a></li>"
-      +"<li><a href=javascript:viewdropdownBtn('이월')>이월</a></li>"
-      +"<li><a href=javascript:viewdropdownBtn('기타')>기타</a></li>"
+      +"<li><a href=javascript:viewdropdownBtn('월급',"+index+")>월급</a></li>"
+      +"<li><a href=javascript:viewdropdownBtn('용돈',"+index+")>용돈</a></li>"
+      +"<li><a href=javascript:viewdropdownBtn('이월',"+index+")>이월</a></li>"
+      +"<li><a href=javascript:viewdropdownBtn('기타',"+index+")>기타</a></li>"
     +"</ul>";
-    var expenditure = "<button class='btn btn-primary dropdown-toggle' id='viewdropdownBtn' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
+    var expenditure = "<button class='btn btn-primary dropdown-toggle' id='viewdropdownBtn"+index+"' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
 	    +"<br><br>"
 	    +"<ul class='dropdown-menu'>"
-	      +"<li><a href=javascript:viewdropdownBtn('식비')>식비</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('교통비')>교통비</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('문화생활')>문화생활</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('생필품')>생필품</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('쇼핑')>쇼핑</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('의료')>의료</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('교육')>교육</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('통신비')>통신비</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('회비')>회비</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('경조사')>경조사</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('저축')>저축</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('공과금')>공과금</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('카드대금')>카드대금</a></li>"
-	      +"<li><a href=javascript:viewdropdownBtn('기타')>기타</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('식비',"+index+")>식비</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('교통비',"+index+")>교통비</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('문화생활',"+index+")>문화생활</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('생필품',"+index+")>생필품</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('쇼핑',"+index+")>쇼핑</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('의료',"+index+")>의료</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('교육',"+index+")>교육</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('통신비',"+index+")>통신비</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('회비',"+index+")>회비</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('경조사',"+index+")>경조사</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('저축',"+index+")>저축</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('공과금',"+index+")>공과금</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('카드대금',"+index+")>카드대금</a></li>"
+	      +"<li><a href=javascript:viewdropdownBtn('기타',"+index+")>기타</a></li>"
 	    +"</ul>";
-	$("#viewcategory").html(category);
-
+	$("#viewcategory"+index).html(category);
+	$("#viewcategory").val(category);
 	if(category == "수입"){
-		$("#viewdropdownCa").html(income);
+		$("#viewdropdownCa"+index).html(income);
 	}else if(category == "지출"){
-		$("#viewdropdownCa").html(expenditure);
+		$("#viewdropdownCa"+index).html(expenditure);
 	}
 }
-function viewdropdownBtn(gubun){
+function viewdropdownBtn(gubun,index){
 	$("#viewdivision").val(gubun);
-	$("#viewdropdownBtn").html(gubun);
+	$("#viewdropdownBtn"+index).html(gubun);
 }
 function viewmodalShow(index,category,obj,division){
 	viewcategoryBtn(category,index);
-	viewdropdownBtn(division);
-	alert("#"+obj);
+	viewdropdownBtn(division,index);
 	$("#"+obj).attr("data-toggle","modal");
 	$("#"+obj).attr("data-target","#viewModal"+index);
 	$("#"+obj).click();
-	
 }
 
-function viewUpdate(num){
-	if($("#viewmembernum").val() == ""){
+function viewUpdate(num,index){
+	if($("#viewmembernum"+index).val() == ""){
 		alert("로그인 후 이용해주세요.");
 		location.href = "/household/main/loginform";
 	}else{
-		if($("#viewcategory").text() == ""){
+		if($("#viewcategory"+index).text() == ""){
 	   		alert("카테고리를 선택해주세요.");
 	   		return false;
 	   	}
-		if($("#viewdivision").val() == ""){
+		if($("#viewdropdownBtn"+index).html() == ""){
 	   		alert("구분을 선택해주세요.");
 	   		return false;
 	   	}
-	   	if($("#viewmoney").val() == ""){
+	   	if($("#viewmoney"+index).val() == ""){
 	   		alert("잔액을 입력해주세요.");
 	   		return false;
 	   	}
-	   	if($("#viewregdate").val() == ""){
+	   	if($("#viewregdate"+index).val() == ""){
 	   		alert("날짜를 선택해주세요.");
 	   		return false;
 	   	}
 	}
+	alert($("#viewmoney"+index).val());
    	$.ajax({
      	type : "post",
      	url : "/household/table/viewUpdate",
-     	data : {"division":$("#viewdivision").val(),"membernum":$("#viewmembernum").val(),"num":num,"content":$("#viewcontent").val(),"money":$("#viewmoney").val(),"regdate":$("#viewregdate").val(),"category":$("#viewcategory").text()},
+     	data : {"division":$("#viewdropdownBtn"+index).html(),"membernum":$("#viewmembernum"+index).val(),"num":num,"content":$("#viewcontent"+index).val(),"money":$("#viewmoney"+index).val(),"regdate":$("#viewregdate"+index).val(),"category":$("#viewcategory"+index).text()},
      	success:function(data){
 	     if(data == 1){
 	     		alert("변경되었습니다.");
-	     		location.href = "/household/table/tableform?membernum="+$("#viewmembernum").val();
+	     		location.href = "/household/table/tableform?membernum="+$("#viewmembernum"+index).val();
 	     }
      	},
  		error : function(e){
@@ -102,22 +101,15 @@ function viewDelete(num){
 	     	success:function(data){
 		     if(data == 1){
 		     		alert("삭제되었습니다.");
-		     		location.href = "/household/table/tableform?membernum="+$("#viewmembernum").val();
+		     		location.href = "/household/table/tableform?membernum="+$("#viewmembernum"+index).val();
 		     }
 	     	},
 	 		error : function(e){
 				alert("error :"+e);
 			}
-	     		
 	     	});
 	}
 }
-$(document).ready(function(){
-	$('#inModal').on('hidden.bs.modal', function (e) {
-	    	$("#viewcategory").text("");
-	    	$("#viewdropdownBtn").css("display","none");
-	    });
-})
 </script>
 
 <head>
@@ -217,30 +209,29 @@ $(document).ready(function(){
 			                        	카테고리를 선택하세요.
 			                        </a>
 			                        <div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="navbarDropdown">
-			                          <a class="dropdown-item" href="javascript:viewcategoryBtn('수입')">수입</a>
-			                          <a class="dropdown-item" href="javascript:viewcategoryBtn('지출')">지출</a>
+			                          <a class="dropdown-item" href="javascript:viewcategoryBtn('수입',${stat.index })">수입</a>
+			                          <a class="dropdown-item" href="javascript:viewcategoryBtn('지출',${stat.index })">지출</a>
 			                        </div>
 			                      </li>
 			                    </ul>
 			                    <ul>
-			                    	<li class="navbar-nav ml-auto"><div id = "viewcategory" class="h3 mb-0 text-gray-800" align="center">${i.category}</div></li>
+			                    	<li class="navbar-nav ml-auto"><div id = "viewcategory${stat.index }" class="h3 mb-0 text-gray-800" align="center">${i.category}</div></li>
 			                    </ul>
 			                  </nav>
 					        </div>
 					        <div class="modal-body">
-					        	<input type = "text" id = "viewdivision" name = "viewdivision" value="${i.division}">
-							    <input type = "hidden" id = "viewmembernum" name = "viewmembernum" value="${i.membernum}">
-			    			  <div id="viewdropdownCa">
+							    <input type = "text" id = "viewmembernum${stat.index }" name = "viewmembernum${stat.index }" value="${i.membernum}">
+			    			  <div id="viewdropdownCa${stat.index }">
 							  </div>
-							  내용 : <input type="text" class="form-control form-control-user" id="viewcontent" name="viewcontent" aria-describedby="emailHelp" value="${i.content }">
+							  내용 : <input type="text" class="form-control form-control-user" id="viewcontent${stat.index }" name="viewcontent${stat.index }" aria-describedby="emailHelp" value="${i.content }">
 							  <br>
-					                  금액 : <input type="text" class="form-control form-control-user" id="viewmoney" name="viewmoney" aria-describedby="emailHelp" value="${i.money }" onkeydown="return comma(event)">
+					                  금액 : <input type="text" class="form-control form-control-user" id="viewmoney${stat.index }" name="viewmoney${stat.index }" aria-describedby="emailHelp" value="${i.money }" onkeydown="return comma(event)">
 					          <br>
-					                  일자 :  <input type="date" class="form-control form-control-user" id="viewregdate" name="viewregdate" aria-describedby="emailHelp" value="${i.regdate }">
+					                  일자 :  <input type="date" class="form-control form-control-user" id="viewregdate${stat.index }" name="viewregdate${stat.index }" aria-describedby="emailHelp" value="${i.regdate }">
 					          <br>
 					        </div>
 					        <div class="modal-footer">
-					          <a href="javascript:viewUpdate(${i.num})" class="btn btn-success btn-icon-split">
+					          <a href="javascript:viewUpdate(${i.num},${stat.index })" class="btn btn-success btn-icon-split">
 			                    <span class="icon text-white-50">
 			                      <i class="fas fa-check"></i>
 			                    </span>
