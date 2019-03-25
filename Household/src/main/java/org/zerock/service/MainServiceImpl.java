@@ -160,4 +160,10 @@ public class MainServiceImpl implements MainService{
 		mapper.viewDelete(vo);
 	}
 
+	@Override
+	public HouseholdVO view(int num) {
+		// TODO Auto-generated method stub
+		return mapper.view(num);
+	}
+
 }

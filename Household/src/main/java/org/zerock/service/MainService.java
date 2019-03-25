@@ -37,4 +37,6 @@ public interface MainService {
 	public void viewUpdate(HouseholdVO vo);
 	//tablelist ªË¡¶
 	public void viewDelete(HouseholdVO vo);
+	//view
+	public HouseholdVO view(int num);
 }

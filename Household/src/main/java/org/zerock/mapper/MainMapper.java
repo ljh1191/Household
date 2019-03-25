@@ -30,4 +30,5 @@ public interface MainMapper {
 	public ArrayList<HouseholdVO> barRank(HomeVO vo);
 	public void viewUpdate(HouseholdVO vo);
 	public void viewDelete(HouseholdVO vo);
+	public HouseholdVO view(int num);
 }

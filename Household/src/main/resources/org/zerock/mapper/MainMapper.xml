@@ -85,4 +85,9 @@
 <delete id="viewDelete" parameterType="org.zerock.domain.HouseholdVO">
 	delete from household where num = #{num}
 </delete>
+
+<select id="view" parameterType="int" resultType="org.zerock.domain.HouseholdVO">
+	select * from household where num = #{num}
+</select>
+
  </mapper>

@@ -75,7 +75,6 @@ function viewUpdate(num,index){
 	   		return false;
 	   	}
 	}
-	alert($("#viewmoney"+index).val());
    	$.ajax({
      	type : "post",
      	url : "/household/table/viewUpdate",
@@ -90,7 +89,7 @@ function viewUpdate(num,index){
 			alert("error :"+e);
 		}
      		
-     	});
+    });
 }
 function viewDelete(num){
 	if(confirm("정말삭제하시겠습니까?")){
@@ -101,13 +100,13 @@ function viewDelete(num){
 	     	success:function(data){
 		     if(data == 1){
 		     		alert("삭제되었습니다.");
-		     		location.href = "/household/table/tableform?membernum="+$("#viewmembernum"+index).val();
+		     		location.reload();
 		     }
 	     	},
 	 		error : function(e){
 				alert("error :"+e);
 			}
-	     	});
+	     });
 	}
 }
 </script>
@@ -220,12 +219,12 @@ function viewDelete(num){
 			                  </nav>
 					        </div>
 					        <div class="modal-body">
-							    <input type = "text" id = "viewmembernum${stat.index }" name = "viewmembernum${stat.index }" value="${i.membernum}">
+							    <input type = "hidden" id = "viewmembernum${stat.index }" name = "viewmembernum${stat.index }" value="${i.membernum}">
 			    			  <div id="viewdropdownCa${stat.index }">
 							  </div>
 							  내용 : <input type="text" class="form-control form-control-user" id="viewcontent${stat.index }" name="viewcontent${stat.index }" aria-describedby="emailHelp" value="${i.content }">
 							  <br>
-					                  금액 : <input type="text" class="form-control form-control-user" id="viewmoney${stat.index }" name="viewmoney${stat.index }" aria-describedby="emailHelp" value="${i.money }" onkeydown="return comma(event)">
+					                  금액 : <input type="text" class="form-control form-control-user" id="viewmoney${stat.index }" name="viewmoney${stat.index }" aria-describedby="emailHelp" value="${i.money }">
 					          <br>
 					                  일자 :  <input type="date" class="form-control form-control-user" id="viewregdate${stat.index }" name="viewregdate${stat.index }" aria-describedby="emailHelp" value="${i.regdate }">
 					          <br>

@@ -9,90 +9,139 @@
 
 <script src='/household/resources/fullcalendar/core/main.js'></script>
 <script src='/household/resources/fullcalendar/daygrid/main.js'></script>
+<script src='/household/resources/fullcalendar/list/main.js'></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-//   var str = "[";
- /*  for (var i = 1; i < 5; i++) {
-  	  str += "{title : '"+$('#list'+i).val()+"', start : '"+$('#listreg'+i).val()+"', textColor : '#ffffff'},";
-  	  if(i == 4){
-  		str += "{title : '"+$('#list'+i).val()+"', start : '"+$('#listreg'+i).val()+"', textColor : '#ffffff'}]";
-  	  }
-  } */
- 
-
-//   JSONArray jArray = new JSONArray();
-  		
-//   for( i=0;i<5;i++){
-// 	JSONObject jsonObj = new JSONObject();
-//   	jsonObj.put("title", $('#list'+i).val());
-//   	jsonObj.put("start", $('#listreg'+i).val());
-//   	jsonObj.put("textColor", '#ffffff');
-  			
-//   	jArray.add(jsonObj);
-//   }
-//   alert(str);
+$(document).ready(function(){
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'dayGrid' ],
-//      events : [{title : "gd",start : "2019-02-22",textColor : "#ffffff"},
-// 				{title : "gg",start : "2019-03-23",textColor : "#ffffff"}],
-//  	  events :jArray,	
+      plugins: ['dayGrid'],
+
+   events: {
+	  	         url: '/household/main/calendarGetdata?membernum='+$("#membernum").val(),
+	  	         method: 'get',
+	  	          failure: function() {
+	  	           alert('there was an error while fetching events!')
+ 	             },
+ 	             color : "#36b9cc",
+ 	            textColor : "white"
+   },
       defaultView: 'dayGridMonth'
     });
 
     calendar.render();
   });
-  
-  $(document).ready(function(){
-	  alert($("#membernum").val());
-	/*   var data="";
-	  $.ajax({
-		  url:"/household/main/calendarGetdata?membernum="+$("#membernum").val(),
-	 		type : "get",
-	 		success : function(data){
-	 			data =data;
-	 			alert(data);
-	 		},
+  function calModal(num){
+	$.ajax({
+		type : "get",
+		url : "/household/main/view",
+		data : {"num":num},
+		success : function(data){
+			calcategoryBtn(data.category);
+			caldropdownBtn(data.division);
+			$("#num").val(data.num);
+			$("#calcontent").val(data.content);
+			$("#calmoney").val(data.money);
+			$("#calregdate").val(data.regdate);
+			$("#calModal").modal('show');
+		}
+	})
+  }
+  function calcategoryBtn(category){
+		var income = "<button class='btn btn-primary dropdown-toggle' id='caldropdownBtn' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
+	    +"<br><br>"
+	    +"<ul class='dropdown-menu'>"
+	      +"<li><a href=javascript:caldropdownBtn('월급')>월급</a></li>"
+	      +"<li><a href=javascript:caldropdownBtn('용돈')>용돈</a></li>"
+	      +"<li><a href=javascript:caldropdownBtn('이월')>이월</a></li>"
+	      +"<li><a href=javascript:caldropdownBtn('기타')>기타</a></li>"
+	    +"</ul>";
+	    var expenditure = "<button class='btn btn-primary dropdown-toggle' id='caldropdownBtn' type='button' data-toggle='dropdown'>구분<span class='caret'></span></button>"
+		    +"<br><br>"
+		    +"<ul class='dropdown-menu'>"
+		      +"<li><a href=javascript:caldropdownBtn('식비')>식비</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('교통비')>교통비</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('문화생활')>문화생활</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('생필품')>생필품</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('쇼핑')>쇼핑</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('의료')>의료</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('교육')>교육</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('통신비')>통신비</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('회비')>회비</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('경조사')>경조사</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('저축')>저축</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('공과금')>공과금</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('카드대금')>카드대금</a></li>"
+		      +"<li><a href=javascript:caldropdownBtn('기타')>기타</a></li>"
+		    +"</ul>";
+		$("#categorydrop").val(category);
+		$("#calcategory").html(category);
+		if(category == "수입"){
+			$("#caldropdownCa").html(income);
+		}else if(category == "지출"){
+			$("#caldropdownCa").html(expenditure);
+		}
+	}
+	function caldropdownBtn(gubun){
+		$("#caldropdownBtn").text(gubun);
+	}
+
+	function calUpdate(){
+		if($("#membernum").val() == ""){
+			alert("로그인 후 이용해주세요.");
+			location.href = "/household/main/loginform";
+		}else{
+			if($("#categorydrop").val() == ""){
+		   		alert("카테고리를 선택해주세요.");
+		   		return false;
+		   	}
+			if($("#caldropdownBtn").text() == ""){
+		   		alert("구분을 선택해주세요.");
+		   		return false;
+		   	}
+		   	if($("#calmoney").val() == ""){
+		   		alert("잔액을 입력해주세요.");
+		   		return false;
+		   	}
+		   	if($("#calregdate").val() == ""){
+		   		alert("날짜를 선택해주세요.");
+		   		return false;
+		   	}
+		}
+	   	$.ajax({
+	     	type : "post",
+	     	url : "/household/table/viewUpdate",
+	     	data : {"division":$("#caldropdownBtn").text(),"membernum":$("#membernum").val(),"num":$("#num").val(),"content":$("#calcontent").val(),"money":$("#calmoney").val(),"regdate":$("#calregdate").val(),"category":$("#categorydrop").val()},
+	     	success:function(data){
+		     if(data == 1){
+		     		alert("변경되었습니다.");
+		     		location.reload();
+		     }
+	     	},
 	 		error : function(e){
-	 			alert("error : "+e);
-	 		} 
-	  }) */
-	  var calendarEl = document.getElementById('calendar');
-	  var calendar = new FullCalendar.Calendar(calendarEl, {
-	      plugins: [ 'dayGrid' ],
-//	      events : [{title : "gd",start : "2019-02-22",textColor : "#ffffff"},
-//	 				{title : "gg",start : "2019-03-23",textColor : "#ffffff"}],
-	  	  events :$.get("/household/main/calendarGetdata?membernum="+$("#membernum").val(),
-		 		function(data){
-	  		  alert(data);
-	  		      data
-	  	        }),
-		  
-	      defaultView: 'dayGridMonth'
-	    });
-	 /* $("#calendar").calendar({
-		lang : "ko",
-	 	header :{
-	 		left : "123",
-	 		center : "title",
-	 		right : 'month,listMonth'
-	 	},
-	 	eventSources:[{
-	 		url:"/household/main/calendarGetdata?membernum="+$("#membernum").val(),
-	 		type : "get",
-	 		success : function(data){
-	 			alert(data);
-	 		},
-	 		error : function(e){
-	 			alert("error : "+e);
-	 		},
-	 		allDayDefault : true
-	 	}]
-	 }); */
-  });
+				alert("error :"+e);
+			}
+	     		
+	     	});
+	}
+	function viewDelete(num){
+		if(confirm("정말삭제하시겠습니까?")){
+			$.ajax({
+		     	type : "post",
+		     	url : "/household/table/viewDelete",
+		     	data : {"num":num},
+		     	success:function(data){
+			     if(data == 1){
+			     		alert("삭제되었습니다.");
+			     		location.href = "/household/table/tableform?membernum="+$("#membernum").val();
+			     }
+		     	},
+		 		error : function(e){
+					alert("error :"+e);
+				}
+		     	});
+		}
+	}
 </script>
 <link href='/household/resources/fullcalendar/core/main.css' rel='stylesheet' />
 <link href='/household/resources/fullcalendar/daygrid/main.css' rel='stylesheet' />
@@ -111,7 +160,7 @@
 </head>
 
 <body id="page-top">
-<input type = "text" id = "membernum" name = "membernum" value="${vo.num }">
+<input type = "hidden" id = "membernum" name = "membernum" value="${vo.num }">
   <!-- Page Wrapper -->
   <div id="wrapper">
 
@@ -140,14 +189,62 @@
 
               <!-- Custom Text Color Utilities -->
 	              <div class="card shadow" style="padding: 20px">
-<%-- 	              <input type = "hidden" id = "listSize" name = "listSize" value="${listSize }"> --%>
-	              
-<%-- 		              <c:forEach items="${list }" var="i" varStatus="stat"> --%>
-<%-- 		              	<input type = "hidden" id = "list${stat.index }" name = "list${stat.index }" value="${i.category} ${i.division }:<fmt:formatNumber value="${i.money}" pattern="#,###" />원"> --%>
-<%-- 		              	<input type = "hidden" id = "listreg${stat.index }" name = "listreg${stat.index }" value="${i.regdate}"> --%>
-<%-- 		              </c:forEach> --%>
-		            
 	              <div id="calendar"></div>
+	              <div class="modal income" id="calModal" role="dialog">
+					    <div class="modal-dialog">
+					    
+					      <!-- Modal content-->
+					      <div class="modal-content">
+					        <div class="modal-header">
+					        <input type = "hidden" id = "num" name = "num">
+			<!-- 		          <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+			                   <nav class="navbar navbar-expand navbar-light bg-light mb-4" style="width: 100%">
+			                    <ul class="navbar-nav ml-auto">
+			                      <li class="nav-item dropdown">
+			                        <a class="nav-link dropdown-toggle" id = "categorydrop" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: gray;">
+			                        	카테고리를 선택하세요.
+			                        </a>
+			                        <div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="navbarDropdown">
+			                          <a class="dropdown-item" href="javascript:calcategoryBtn('수입')">수입</a>
+			                          <a class="dropdown-item" href="javascript:calcategoryBtn('지출')">지출</a>
+			                        </div>
+			                      </li>
+			                    </ul>
+			                    <ul>
+			                    	<li class="navbar-nav ml-auto"><div id = "calcategory" class="h3 mb-0 text-gray-800" align="center"></div></li>
+			                    </ul>
+			                  </nav>
+					        </div>
+					        <div class="modal-body">
+			    			  <div id="caldropdownCa">
+							  </div>
+							  내용 : <input type="text" class="form-control form-control-user" id="calcontent" name="calcontent">
+							  <br>
+					                  금액 : <input type="text" class="form-control form-control-user" id="calmoney" name="calmoney">
+					          <br>
+					                  일자 :  <input type="date" class="form-control form-control-user" id="calregdate" name="calregdate">
+					          <br>
+					        </div>
+					        <div class="modal-footer">
+					          <a href="javascript:calUpdate()" class="btn btn-success btn-icon-split">
+			                    <span class="icon text-white-50">
+			                      <i class="fas fa-check"></i>
+			                    </span>
+			                    <span class="text">수정</span>
+			                  </a>
+			                  <a href="javascript:calDelete()" class="btn btn-danger btn-icon-split">
+			                    <span class="icon text-white-50">
+			                      <i class="fas fa-trash"></i>
+			                    </span>
+			                    <span class="text">삭제</span>
+			                  </a>
+			                  <div class="my-2"></div>
+					          <button type="button" id = "closemodal" class="btn btn-default" data-dismiss="modal">닫기</button>
+					        </div>
+					      </div>
+					      
+					    </div>
+					  </div>
               </div>
 
             </div>

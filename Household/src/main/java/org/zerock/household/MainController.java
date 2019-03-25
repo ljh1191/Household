@@ -2,6 +2,7 @@ package org.zerock.household;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -103,10 +104,15 @@ public class MainController {
 			}
 			mo.addAttribute("Stockarr", arr);
 			
-			//키움증권 경제이슈
+			//네이버 경제이슈
 			doc = Jsoup.connect("https://finance.naver.com/news/mainnews.nhn").get();
 			Elements naverissu = doc.select("div.mainNewsList");
-			mo.addAttribute("naverissu", naverissu.toString().replaceAll("<a", "<a class= text-success "));
+			String naveriss = "";
+			for (int i = 0; i < 4; i++) {
+				naveriss += naverissu.select("li").eq(i).toString();
+				naveriss += "<br>";
+			}
+			mo.addAttribute("naverissu", naveriss.replaceAll("<a", "<a class= text-success "));
 			
 			//LG경제연구원
 			doc = Jsoup.connect("http://www.lgeri.com/economy/list.do?type=economy&rankOptions=TITLE/50,CONTENTS_PDF/30,KEYWORD/100,KEYWORD_TOP/100").get();
@@ -295,20 +301,33 @@ public class MainController {
 	
 	@RequestMapping(value = "calendarGetdata", method = RequestMethod.GET, produces= {"text/plain;charset=utf-8"})
 	public @ResponseBody String calendarGetdata(int membernum) {
-		System.out.println("1");
 		List<HouseholdVO> list = service.tableList(membernum);
-		
+		DecimalFormat formatter = new DecimalFormat("###,###");
 		JSONArray jarr = new JSONArray();
 		JSONObject obj = null;
 		for (HouseholdVO vo : list) {
 			obj = new JSONObject();
-			obj.put("title", vo.getCategory()+" "+vo.getDivision()+" : "+vo.getMoney());
+			obj.put("title", vo.getCategory()+"_"+vo.getDivision()+" : "+formatter.format(vo.getMoney())+"원");
 			obj.put("start", vo.getRegdate());
-			obj.put("textColor", "#ffffff");
-			
+			obj.put("url", "javascript:calModal("+vo.getNum()+")");
 			jarr.add(obj);
 		}
 		System.out.println(jarr.toString());
-		return jarr.toJSONString();
+		return jarr.toString();
+	}
+	
+	@RequestMapping(value = "view", method = RequestMethod.GET, produces = {"application/json;charset=utf-8"})
+	public @ResponseBody String view(int num) {
+		System.out.println(num);
+		HouseholdVO vo = service.view(num);
+		JSONObject obj = new JSONObject();
+		obj.put("num", vo.getNum());
+		obj.put("membernum", vo.getMembernum());
+		obj.put("division", vo.getDivision());
+		obj.put("money", vo.getMoney());
+		obj.put("regdate", vo.getRegdate());
+		obj.put("content", vo.getContent());
+		obj.put("category", vo.getCategory());
+		return obj.toString();
 	}
 }
