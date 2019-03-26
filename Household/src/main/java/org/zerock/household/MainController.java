@@ -2,13 +2,24 @@ package org.zerock.household;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPublicKeySpec;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.crypto.Cipher;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
@@ -141,7 +152,34 @@ public class MainController {
 	}
 	
 	@GetMapping("/loginform")
-	public String loginform() {
+	public String loginform(HttpSession session,Model mo) throws InvalidKeySpecException {
+		try {
+			KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
+			gen.initialize(512);
+			
+			KeyPair keyPair = gen.generateKeyPair();
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			
+			PublicKey publickey = keyPair.getPublic();
+			PrivateKey privatekey = keyPair.getPrivate();
+			
+			System.out.println("pub"+publickey);
+			System.out.println("pri"+privatekey);
+			
+			session.setAttribute("PrivateKey", privatekey);
+			
+			RSAPublicKeySpec publicspec = keyFactory.getKeySpec(publickey, RSAPublicKeySpec.class);
+			
+			String publickeyModulus = publicspec.getModulus().toString(16);
+			String publickeyEponent = publicspec.getPublicExponent().toString(16);
+			
+			mo.addAttribute("publicKeyModulus", publickeyModulus);
+			mo.addAttribute("publickeyEponent", publickeyEponent);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		logger.info("로그인으로 이동");
 		return "main/login";
 	}
@@ -175,11 +213,31 @@ public class MainController {
 	}
 	
 	@PostMapping("/login")
-	public @ResponseBody String login(String email,String password,HttpSession session) {
+	public @ResponseBody String login(String securedUsername,String securedPassword,HttpSession session,Model mo) throws ServletException {
+		System.out.println(securedUsername);
+		System.out.println(securedPassword);
+		
+		PrivateKey privateKey = (PrivateKey) session.getAttribute("PrivateKey");
+		session.removeAttribute("PrivateKey");
+		String username = "";
+		String password = "";
+		if(privateKey == null) {
+			throw new RuntimeException("암호화 비밀키 정보를 찾을 수 없습니다.");
+		}
+		try {
+            username = decryptRsa(privateKey, securedUsername);
+            password = decryptRsa(privateKey, securedPassword);
+//            mo.addAttribute("username", username);
+//            mo.addAttribute("password", password);
+            
+        } catch (Exception ex) {
+            throw new ServletException(ex.getMessage(), ex);
+        }
+    
 		MemberVO vo = new MemberVO();
 		vo.setPassword(password);
-		vo.setEmail(email);
-		MemberVO check = service.login(email);
+		vo.setEmail(username);
+		MemberVO check = service.login(username);
 		if(check != null) {
 			if(password.equals(check.getPassword())) {
 				//로그인성공
@@ -192,6 +250,31 @@ public class MainController {
 		//회원아님
 		return "-1";
 	}
+	 private String decryptRsa(PrivateKey privateKey, String securedValue) throws Exception {
+	        System.out.println("will decrypt : " + securedValue);
+	        Cipher cipher = Cipher.getInstance("RSA");
+	        byte[] encryptedBytes = hexToByteArray(securedValue);
+	        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+	        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+	        String decryptedValue = new String(decryptedBytes, "utf-8"); // 문자 인코딩 주의.
+	        return decryptedValue;
+	    }
+
+	    /**
+	     * 16진 문자열을 byte 배열로 변환한다.
+	     */
+	    public static byte[] hexToByteArray(String hex) {
+	        if (hex == null || hex.length() % 2 != 0) {
+	            return new byte[]{};
+	        }
+
+	        byte[] bytes = new byte[hex.length() / 2];
+	        for (int i = 0; i < hex.length(); i += 2) {
+	            byte value = (byte)Integer.parseInt(hex.substring(i, i + 2), 16);
+	            bytes[(int) Math.floor(i / 2)] = value;
+	        }
+	        return bytes;
+	    }
 	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
