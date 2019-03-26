@@ -93,8 +93,8 @@ function submitEncryptedForm(username, password, rsaPublicKeyModulus, rsaPpublic
                   <input type="text" id="rsaPublicKeyModulus" value="${publicKeyModulus }" />
             		<input type="text" id="rsaPublicKeyExponent" value="${publickeyEponent }" />
             		 <form id="securedLoginForm" name="securedLoginForm" style="display: none;">
-            			<input type="text" name="securedUsername" id="securedUsername" value="" />
-            			<input type="text" name="securedPassword" id="securedPassword" value="" />
+            			<input type="hidden" name="securedUsername" id="securedUsername" value="" />
+            			<input type="hidden" name="securedPassword" id="securedPassword" value="" />
         			  </form>
                   <form class="user">
                     <div class="form-group">
