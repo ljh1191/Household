@@ -50,10 +50,7 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public void createAuthKey(String email, String key) {
 		// TODO Auto-generated method stub
-		System.out.println("이메일 : "+email);
 		int membernum = mapper.getMembernum(email);
-		System.out.println("회원번호 : "+membernum);
-		System.out.println(key);
 		EmailVO vo = new EmailVO();
 		vo.setEmail(email);
 		vo.setAuthkey(key);
@@ -112,9 +109,7 @@ public class MainServiceImpl implements MainService{
 		// TODO Auto-generated method stub
 		vo.setMon_incom(mapper.getIncome(vo));
 		vo.setMon_dx(mapper.getDx(vo));
-		System.out.println("서비스 회원번호 : "+vo.getMembernum());
 		int nowmon_num = Integer.parseInt(vo.getNowmonth());
-		System.out.println("mon_num : "+nowmon_num);
 		//해당월까지의 배열생성
 		String[] mon = new String[nowmon_num];
 		for (int i = 1; i <= nowmon_num; i++) {
@@ -135,9 +130,6 @@ public class MainServiceImpl implements MainService{
 			mon_income[i] = mapper.getMonthincome(hm);
 		}
 		vo.setMon_area_incom(mon_income);
-		for (int i = 0; i < mon_income.length; i++) {
-			System.out.println("월별 지출 결과값 : "+mon_income[i]);
-		}
 		//pie chart 데이터
 		ArrayList<HouseholdVO> arr = mapper.pieRank(vo);
 		vo.setMon_pie_incom(arr);

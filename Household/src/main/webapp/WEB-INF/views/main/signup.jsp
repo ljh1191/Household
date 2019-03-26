@@ -3,7 +3,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+ <script type="text/javascript">
+function signupBtn(){
+	//빈값체크
+	if($("#name").val()==""){
+		alert("이름을 입력해주세요.");
+		return false;
+	}
+	if($("#email").val()==""){
+		alert("이메일을 입력해주세요.");
+		return false;
+	}
+	if($("#password").val()==""){
+		alert("비밀번호를 입력해주세요.");
+		return false;
+	}
+	if($("#passwordcheck").val()==""){
+		alert("비밀번호 확인을 입력해주세요.");
+		return false;
+	}
+	//비밀번호 일치여부 확인
+	if($("#password").val()==$("#passwordcheck").val()){
+		$.ajax({
+			type : "post",
+			url : "/household/main/signup",
+			data : {"name" : $("#name").val(),"email" : $("#email").val(),"password" : $("#password").val()},
+			success:function(data){
+				if(data == -1){
+					alert("이미 가입된 이메일이 있습니다.");
+					return false;
+				}else if(data == 1){
+					alert("회원가입 되었습니다.");
+					location.href = "/household/main/loginform";
+				}
+			},
+			error : function(e){
+				alert("error :"+e);
+			}
+		});
+	}else{
+		alert("비밀번호가 틀립니다.");
+		return false;
+	}
+}
+</script>
 <jsp:include page="../include/header.jsp"/>
+<head>
+<title>SignUp</title>
+</head>
 
 <body class="bg-gradient-primary">
 
@@ -17,7 +64,7 @@
           <div class="col-lg-7">
             <div class="p-5">
               <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">회원가입</h1>
+                <h1 class="h4 text-gray-900 mb-4">회원가입!</h1>
               </div>
               <form class="user">
                 <div class="form-group row">
@@ -36,67 +83,17 @@
                     <input type="password" class="form-control form-control-user" id="passwordcheck" name="passwordcheck" placeholder="비밀번호 확인">
                   </div>
                 </div>
-                <script type="text/javascript">
-                function signupBtn(){
-                	//빈값체크
-                	if($("#name").val()==""){
-                		alert("이름을 입력해주세요.");
-                		return false;
-                	}
-                	if($("#email").val()==""){
-                		alert("이메일을 입력해주세요.");
-                		return false;
-                	}
-                	if($("#password").val()==""){
-                		alert("비밀번호를 입력해주세요.");
-                		return false;
-                	}
-                	if($("#passwordcheck").val()==""){
-                		alert("비밀번호 확인을 입력해주세요.");
-                		return false;
-                	}
-                	//비밀번호 일치여부 확인
-					if($("#password").val()==$("#passwordcheck").val()){
-						$.ajax({
-							type : "post",
-							url : "/household/main/signup",
-							data : {"name" : $("#name").val(),"email" : $("#email").val(),"password" : $("#password").val()},
-							success:function(data){
-								if(data == -1){
-									alert("이미 가입된 이메일이 있습니다.");
-									return false;
-								}else if(data == 1){
-									alert("회원가입 되었습니다.");
-									location.href = "/household/main/loginform";
-								}
-							},
-							error : function(e){
-								alert("error :"+e);
-							}
-						});
-					}else{
-						alert("비밀번호가 틀립니다.");
-						return false;
-					}
-                }
-                </script>
                 <input type = "button" class="btn btn-primary btn-user btn-block" value="Sign Up" onclick="signupBtn()">
                 
                 <hr>
-                <a href="index.html" class="btn btn-google btn-user btn-block">
-                  <i class="fab fa-google fa-fw"></i> Register with Google
-                </a>
-                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                  <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                </a>
-              </form>
-              <hr>
               <div class="text-center">
-                <a class="small" href="forgot-password.html">Forgot Password?</a>
+                <a class="small" href="/household/main/forgetpassword">비밀번호 찾기</a>
               </div>
               <div class="text-center">
                 <a class="small" href="/household/main/loginform">로그인</a>
               </div>
+              </form>
+              
             </div>
           </div>
         </div>

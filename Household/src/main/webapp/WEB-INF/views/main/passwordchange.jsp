@@ -23,8 +23,9 @@
               <div class="col-lg-6">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                    <p class="mb-4">We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!</p>
+                    <h1 class="h4 text-gray-900 mb-2">비밀번호 변경!</h1>
+                    <br>
+                    <p class="mb-4">아래에 이메일로 받은 인증키를 입력해주세요!</p>
                   </div>
                   <form class="user">
                   	
@@ -49,7 +50,6 @@
                         		return false;
                         	}
                     		if($("#newpassword").val() == $("#newpasswordcheck").val()){
-                    			alert($("#email").val());
                     			$.ajax({
                             		type : "post",
                             		url : "/household/main/passwordchange",
@@ -75,10 +75,10 @@
                   </form>
                   <hr>
                   <div class="text-center">
-                    <a class="small" href="register.html">Create an Account!</a>
+                    <a class="small" href="/household/main/signupform">회원가입</a>
                   </div>
                   <div class="text-center">
-                    <a class="small" href="login.html">Already have an account? Login!</a>
+                    <a class="small" href="/household/main/loginform">로그인</a>
                   </div>
                 </div>
               </div>

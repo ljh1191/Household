@@ -253,7 +253,6 @@ public class MainController {
 	
 	@PostMapping("/passwordchange")
 	public @ResponseBody String passwordchange(String email,String password,String newpassword) {
-		System.out.println("email : " +email);
 		int passcheck = service.passCheck(email,password);
 		if(passcheck == 1) {
 			int num = service.getMembernum(email);
@@ -312,13 +311,11 @@ public class MainController {
 			obj.put("url", "javascript:calModal("+vo.getNum()+")");
 			jarr.add(obj);
 		}
-		System.out.println(jarr.toString());
 		return jarr.toString();
 	}
 	
 	@RequestMapping(value = "view", method = RequestMethod.GET, produces = {"application/json;charset=utf-8"})
 	public @ResponseBody String view(int num) {
-		System.out.println(num);
 		HouseholdVO vo = service.view(num);
 		JSONObject obj = new JSONObject();
 		obj.put("num", vo.getNum());

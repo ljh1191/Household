@@ -30,7 +30,6 @@ public interface MainService {
 	public void incomeInsert(HouseholdVO vo);
 	//테이블 리스트
 	public List<HouseholdVO> tableList(int membernum);
-	
 	//home 데이터추출
 	public HomeVO homegetData(HomeVO vo);
 	//tablelist 수정

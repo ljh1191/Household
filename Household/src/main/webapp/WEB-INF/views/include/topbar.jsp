@@ -5,7 +5,6 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 	<c:if test="${vo != null }">
 		<div class="sidebar-brand-text mx-3">
-
 			<a href="/household/main/logout">Logout</a>
 		</div>
 	</c:if>

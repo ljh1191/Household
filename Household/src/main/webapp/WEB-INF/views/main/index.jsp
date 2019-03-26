@@ -3,21 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
-
-<title>가계부_정보</title>
-
-<jsp:include page="../include/header.jsp" />
-
-</head>
-
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 	$(document).ready(function() {
@@ -33,6 +18,19 @@
 		});
 	});
 </script>
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Info</title>
+
+<jsp:include page="../include/header.jsp" />
+
+</head>
 
 <body id="page-top">
 
@@ -71,38 +69,38 @@
 								</div>
 							</div>
 
-							<div class="card mb-4 py-3 border-left-success">
+							<div class="card mb-4 border-left-success">
 								<div class="card-body">
 									<h3 class="text-lg mb-0">
 										<a class="text-success" href="https://finance.naver.com/">네이버금융(상위종목)</a>
 									</h3>
 									<hr class="sidebar-divider my-0">
 									<br>
-									<table>
-										<tr>
-											<c:forEach items="${naverStocksRanktitle }" varStatus="stat">
-												<th class="text-success">${naverStocksRanktitle[stat.index] }</th>
-											</c:forEach>
-										</tr>
-										<c:forEach items="${Stockarr }" var="i" varStatus="stat">
+									<div id="table-responsive">
+										<table class="" id="dataTable" width="100%" cellspacing="0">
 											<tr>
-												<td>${i.rank }</td>
-												<td>${i.name }</td>
-												<td>${i.search }</td>
-												<td>${i.now }</td>
-												<td>${i.yesterdayra }</td>
-												<td>${i.updown }</td>
-												<td>${i.deal }</td>
-												<td>${i.pp }</td>
-												<td>${i.high }</td>
-												<td>${i.low }</td>
-												<td>${i.per }</td>
-												<td>${i.roe }</td>
+												<c:forEach items="${naverStocksRanktitle }" varStatus="stat">
+													<th class="text-success">${naverStocksRanktitle[stat.index] }</th>
+												</c:forEach>
 											</tr>
-										</c:forEach>
-
-									</table>
-
+											<c:forEach items="${Stockarr }" var="i" varStatus="stat">
+												<tr>
+													<td>${i.rank }</td>
+													<td>${i.name }</td>
+													<td>${i.search }</td>
+													<td>${i.now }</td>
+													<td>${i.yesterdayra }</td>
+													<td>${i.updown }</td>
+													<td>${i.deal }</td>
+													<td>${i.pp }</td>
+													<td>${i.high }</td>
+													<td>${i.low }</td>
+													<td>${i.per }</td>
+													<td>${i.roe }</td>
+												</tr>
+											</c:forEach>
+										</table>
+									</div>
 								</div>
 							</div>
 
@@ -168,16 +166,6 @@
 
 			</div>
 			<!-- End of Main Content -->
-
-			<!-- Footer -->
-			<footer class="sticky-footer bg-white">
-				<div class="container my-auto">
-					<div class="copyright text-center my-auto">
-						<span>Copyright &copy; Your Website 2019</span>
-					</div>
-				</div>
-			</footer>
-			<!-- End of Footer -->
 
 		</div>
 		<!-- End of Content Wrapper -->

@@ -34,13 +34,6 @@ public class TableController {
 	
 	@PostMapping("/viewUpdate")
 	public @ResponseBody String viewUpdate(HouseholdVO vo) {
-		System.out.println("테이블 번호 : "+vo.getNum());
-		System.out.println("카테고리 : "+vo.getCategory());
-		System.out.println("구분 : "+vo.getDivision());
-		System.out.println("회원번호 : "+vo.getMembernum());
-		System.out.println("돈 : "+vo.getMoney());
-		System.out.println("내용 : "+vo.getContent());
-		System.out.println("날짜 : "+vo.getRegdate());
 		service.viewUpdate(vo);
 		return "1";
 	}
