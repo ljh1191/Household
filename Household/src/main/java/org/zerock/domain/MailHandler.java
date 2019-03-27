@@ -19,7 +19,7 @@ public class MailHandler { // 메일보내기 유틸
 		message = this.mailSender.createMimeMessage();
 		messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 	}
-
+	
 	public void setSubject(String subject) throws MessagingException {
 		messageHelper.setSubject(subject);
 	}

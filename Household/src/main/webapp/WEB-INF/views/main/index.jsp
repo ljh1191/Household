@@ -4,20 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script>
-	$(document).ready(function() {
-		//링크 비활성화
-		$("#kdi").css({
-			'pointer-events' : 'none'
-		});
-		$("#lg").css({
-			'pointer-events' : 'none'
-		});
-		$("#naverfiNews").css({
-			'pointer-events' : 'none'
-		});
-	});
-</script>
+<script type="text/javascript" src="/household/resources/js/household/index.js"></script>
 <head>
 
 <meta charset="utf-8">

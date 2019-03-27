@@ -35,12 +35,14 @@ public class TableController {
 	@PostMapping("/viewUpdate")
 	public @ResponseBody String viewUpdate(HouseholdVO vo) {
 		service.viewUpdate(vo);
+		logger.info("가계부 현황 업데이트.");
 		return "1";
 	}
 	
 	@PostMapping("/viewDelete")
 	public @ResponseBody String viewDelete(HouseholdVO vo) {
 		service.viewDelete(vo);
+		logger.info("가계부 현황 삭제.");
 		return "1";
 	}
 }

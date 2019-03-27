@@ -17,7 +17,6 @@ public interface MainService {
 	public int idcheck(String email);
 	//이메일 인증키 생성 및 발송
 	public void createAuthKey(String email,String key);
-	public void userAuth(String email);
 	//이메일 인증키 확인
 	public EmailVO authkeyselect(int membernum);
 	//회원번호 찾기

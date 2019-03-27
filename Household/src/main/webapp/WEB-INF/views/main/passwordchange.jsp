@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/household/resources/js/household/passwordchange.js"></script>
 <jsp:include page="../include/header.jsp"/>
 
 <body class="bg-gradient-primary">
@@ -35,42 +36,6 @@
                       <input type="password" class="form-control form-control-user" id="newpassword" name="newpassword" placeholder="새 비밀번호">
                       <input type="password" class="form-control form-control-user" id="newpasswordcheck" name="newpasswordcheck" placeholder="새비밀번호 확인">
                     </div>
-                    <script>
-                    	function passwordBtn(){
-                    		if($("#password").val() == ""){
-                        		alert("현재 비밀번호를 입력해주세요.");
-                        		return false;
-                        	}
-                    		if($("#newpassword").val() == ""){
-                        		alert("새비밀번호를 입력해주세요.");
-                        		return false;
-                        	}
-                    		if($("#newpasswordcheck").val() == ""){
-                        		alert("새비밀번호 확인를 입력해주세요.");
-                        		return false;
-                        	}
-                    		if($("#newpassword").val() == $("#newpasswordcheck").val()){
-                    			$.ajax({
-                            		type : "post",
-                            		url : "/household/main/passwordchange",
-                            		data : {"email" : $("#email").val(),"password" : $("#password").val(),"newpassword" : $("#newpassword").val(),"newpasswordcheck" : $("#newpasswordcheck").val()},
-                            		success:function(data){
-                            			if(data == 1){
-                            				alert("비밀번호가 변경되었습니다.");
-                            				location.href = "/household/main/loginform";
-                            			}else{
-                            				alert("현재 비밀번호가 틀립니다.");
-                            				return false;
-                            			}
-                            		},
-                            		error : function(e){
-        								alert("error :"+e);
-        							}
-                            		
-                            	});
-                    		}
-                    	}
-                    </script>
                     <input type = "button" class="btn btn-primary btn-user btn-block" value = "변경하기" onclick="passwordBtn()">
                   </form>
                   <hr>

@@ -19,12 +19,8 @@
  </select>
  
  <insert id="createAuthKey" parameterType="org.zerock.domain.EmailVO">
-	insert into email(num,membernum,email,authkey,tf) values(email_seq.nextval,#{membernum},#{email}, #{authkey}, 0)
+	insert into email(num,membernum,email,authkey) values(email_seq.nextval,#{membernum},#{email}, #{authkey})
 </insert>
-
-<update id="userAuth">
-	update user set userCertification = 1 where (select count(*) from userAuth where userEmail = #{userEmail}) > 0
-</update>
 
 <select id="getMembernum" parameterType="String" resultType="int">
 	select num from member where email = #{email}

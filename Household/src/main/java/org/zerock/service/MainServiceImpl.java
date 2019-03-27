@@ -24,7 +24,6 @@ public class MainServiceImpl implements MainService{
 	
 	@Override
 	public void signup(MemberVO vo) {
-		// TODO Auto-generated method stub
 		logger.info("회원가입");
 		mapper.signup(vo);
 	}
@@ -38,7 +37,6 @@ public class MainServiceImpl implements MainService{
 
 	@Override
 	public int idcheck(String email) {
-		// TODO Auto-generated method stub
 		logger.info("아이디 중복체크");
 		if(mapper.idcheck(email)==1) {
 			return 1;
@@ -49,19 +47,13 @@ public class MainServiceImpl implements MainService{
 
 	@Override
 	public void createAuthKey(String email, String key) {
-		// TODO Auto-generated method stub
+		logger.info("인증키 DB에 저장.");
 		int membernum = mapper.getMembernum(email);
 		EmailVO vo = new EmailVO();
 		vo.setEmail(email);
 		vo.setAuthkey(key);
 		vo.setMembernum(membernum);
 		mapper.createAuthKey(vo);
-	}
-
-	@Override
-	public void userAuth(String email) {
-		// TODO Auto-generated method stub
-		mapper.userAuth(email);
 	}
 
 	@Override

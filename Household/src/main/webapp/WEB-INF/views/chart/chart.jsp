@@ -5,22 +5,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script>
-function mondropdownBtn(num){
-	$("#dropdownMonButton").html(num+"월");
-	var str = "";
-	if(num < 10){
-		str = ("0"+num);
-	}else{
-		str = (""+num);
-	}
-	
-	location.href = "/household/main/chartForm?membernum="+$("#membernum").val()+"&month="+str;
-}
-</script>
+<script type="text/javascript" src="/household/resources/js/household/chart.js"></script>
 
 <jsp:include page="../include/header.jsp"/>
-
+<head>
+<title>Chart</title>
+</head>
 <body id="page-top">
 
   <!-- Page Wrapper -->

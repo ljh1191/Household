@@ -159,20 +159,18 @@ public class MainController {
 			
 			KeyPair keyPair = gen.generateKeyPair();
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			
+			//공개키,개인키생성
 			PublicKey publickey = keyPair.getPublic();
 			PrivateKey privatekey = keyPair.getPrivate();
-			
-			System.out.println("pub"+publickey);
-			System.out.println("pri"+privatekey);
-			
+			logger.info("공개키,개인키 생성");
+			//개인키 세션저장
 			session.setAttribute("PrivateKey", privatekey);
 			
 			RSAPublicKeySpec publicspec = keyFactory.getKeySpec(publickey, RSAPublicKeySpec.class);
 			
 			String publickeyModulus = publicspec.getModulus().toString(16);
 			String publickeyEponent = publicspec.getPublicExponent().toString(16);
-			
+			//공개기 발행
 			mo.addAttribute("publicKeyModulus", publickeyModulus);
 			mo.addAttribute("publickeyEponent", publickeyEponent);
 		} catch (NoSuchAlgorithmException e) {
@@ -180,7 +178,7 @@ public class MainController {
 			e.printStackTrace();
 		}
 		
-		logger.info("로그인으로 이동");
+		logger.info("로그인으로 이동.");
 		return "main/login";
 	}
 	
@@ -214,30 +212,24 @@ public class MainController {
 	
 	@PostMapping("/login")
 	public @ResponseBody String login(String securedUsername,String securedPassword,HttpSession session,Model mo) throws ServletException {
-		System.out.println(securedUsername);
-		System.out.println(securedPassword);
-		
 		PrivateKey privateKey = (PrivateKey) session.getAttribute("PrivateKey");
 		session.removeAttribute("PrivateKey");
-		String username = "";
+		String email = "";
 		String password = "";
-		if(privateKey == null) {
+		if(privateKey == null) {//공개키,개인키 발행이 안됬을 때
 			throw new RuntimeException("암호화 비밀키 정보를 찾을 수 없습니다.");
 		}
 		try {
-            username = decryptRsa(privateKey, securedUsername);
+			email = decryptRsa(privateKey, securedUsername);
             password = decryptRsa(privateKey, securedPassword);
-//            mo.addAttribute("username", username);
-//            mo.addAttribute("password", password);
-            
         } catch (Exception ex) {
             throw new ServletException(ex.getMessage(), ex);
         }
     
 		MemberVO vo = new MemberVO();
 		vo.setPassword(password);
-		vo.setEmail(username);
-		MemberVO check = service.login(username);
+		vo.setEmail(email);
+		MemberVO check = service.login(email);
 		if(check != null) {
 			if(password.equals(check.getPassword())) {
 				//로그인성공
@@ -250,6 +242,7 @@ public class MainController {
 		//회원아님
 		return "-1";
 	}
+	 //개인키를 통한 복호화
 	 private String decryptRsa(PrivateKey privateKey, String securedValue) throws Exception {
 	        System.out.println("will decrypt : " + securedValue);
 	        Cipher cipher = Cipher.getInstance("RSA");
@@ -260,24 +253,23 @@ public class MainController {
 	        return decryptedValue;
 	    }
 
-	    /**
-	     * 16진 문자열을 byte 배열로 변환한다.
-	     */
-	    public static byte[] hexToByteArray(String hex) {
-	        if (hex == null || hex.length() % 2 != 0) {
-	            return new byte[]{};
-	        }
+    // 16진 문자열을 byte 배열로 변환
+	 public static byte[] hexToByteArray(String hex) {
+        if (hex == null || hex.length() % 2 != 0) {
+            return new byte[]{};
+        }
 
-	        byte[] bytes = new byte[hex.length() / 2];
-	        for (int i = 0; i < hex.length(); i += 2) {
-	            byte value = (byte)Integer.parseInt(hex.substring(i, i + 2), 16);
-	            bytes[(int) Math.floor(i / 2)] = value;
-	        }
-	        return bytes;
-	    }
+        byte[] bytes = new byte[hex.length() / 2];
+        for (int i = 0; i < hex.length(); i += 2) {
+            byte value = (byte)Integer.parseInt(hex.substring(i, i + 2), 16);
+            bytes[(int) Math.floor(i / 2)] = value;
+        }
+        return bytes;
+	 }
 	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
+		logger.info("로그아웃.");
 		session.invalidate();
 		return "redirect:/main/index";
 	}
@@ -295,22 +287,32 @@ public class MainController {
 		if(check == null) {
 			return "-1";
 		}
-		String key = new TempKey().getKey(50, false); // 인증키 생성
+		// 인증키 생성
+		String key = new TempKey().getKey(50, false); 
 		System.out.println("인증키 : "+key);
+		//인증키 db에 저장
 		service.createAuthKey(email, key);
 		try {
 			MailHandler sendMail = new MailHandler(mailSender);
+			//메일내용
+			//제목
 			sendMail.setSubject("가계부 프로그램 인증메일입니다.");
+			//내용
 			sendMail.setText(
-					new StringBuffer().append("<h1>비밀번호 찾기 메일인증</h1>").append("").append("인증키 :").append("").append(key).toString());
+							new StringBuffer().append("<h1>비밀번호 찾기 메일인증</h1>").append("").append("인증키 :").append("").append(key).toString()
+							 );
 			try {
+				//발신자
 				sendMail.setFrom(email, "가계부 프로그램");
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			//수신자
 			sendMail.setTo(email);
+			//메일전송
 			sendMail.send();
+			logger.info("인증키 메일로 발송.");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -320,7 +322,10 @@ public class MainController {
 	
 	@PostMapping("/authkey")
 	public @ResponseBody String authkey(String authkey,String email) {
+		logger.info("인증키 확인.");
+		//계정을 통한 회원번호 얻음.
 		int membernum = service.getMembernum(email);
+		//해당회원의 최근에 발급된 인증키 얻음.
 		EmailVO vo = service.authkeyselect(membernum);
 		if(vo.getAuthkey().equals(authkey)) {
 			return "1";
@@ -330,6 +335,7 @@ public class MainController {
 	
 	@GetMapping("/passwordchangeForm")
 	public String passwordchangeForm(String email,Model mo) {
+		logger.info("비밀번호 변경폼으로 이동.");
 		mo.addAttribute("email", email);
 		return "main/passwordchange";
 	}
