@@ -20,6 +20,7 @@ import javax.crypto.Cipher;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
