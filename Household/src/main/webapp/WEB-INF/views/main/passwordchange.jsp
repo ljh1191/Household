@@ -26,13 +26,11 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-2">비밀번호 변경!</h1>
                     <br>
-                    <p class="mb-4">아래에 이메일로 받은 인증키를 입력해주세요!</p>
                   </div>
                   <form class="user">
                   	
                     <div class="form-group">
                     	<input type = "hidden" id = "email" name = "email" value = "${email }">
-                      <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="현재비밀번호">
                       <input type="password" class="form-control form-control-user" id="newpassword" name="newpassword" placeholder="새 비밀번호">
                       <input type="password" class="form-control form-control-user" id="newpasswordcheck" name="newpasswordcheck" placeholder="새비밀번호 확인">
                     </div>
