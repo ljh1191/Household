@@ -39,9 +39,13 @@
                       ${selectmon }월
                     </button>
                     <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMonButton">
+                    	<c:if test="${nowmon != null}">
                     	<c:forEach begin="1" end="${nowmon }" varStatus="stat">
-                    		<a class="dropdown-item" href="javascript:mondropdownBtn(${stat.index })">${stat.index }월</a>
+                    		<c:if test="${hvo.mon_area_incom[stat.index-1] != 0}">
+                    			<a class="dropdown-item" href="javascript:mondropdownBtn(${stat.index })">${stat.index }월</a>
+                    		</c:if>
                     	</c:forEach>
+                    	</c:if>
                     </div>
             </div>
           </div>
@@ -73,6 +77,7 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
+                    	<input type = "hidden" id = "mon_dx" name = "mon_dx" value="${hvo.mon_dx }">
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">지출</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><fmt:formatNumber value="${hvo.mon_dx }" pattern="#,###" />원</div>
                     </div>
@@ -154,12 +159,14 @@
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area">
+                  	<c:if test="${mon_dx != 0 }">
                   		<c:forEach begin="0" end="${nowmon-1}" varStatus="stat">
                   			<input type = "hidden" id="area${stat.index}" name="area${stat.index}" value="${hvo.mon_area_incom[stat.index]}"> 
                   		 </c:forEach>
 	                    <c:forEach begin="${nowmon}" end="11" varStatus="stat">
 	                    <input type = "hidden" id="area${stat.index}" name="area${stat.index}" value="0">
 	                  	</c:forEach>
+               		</c:if>
                     <canvas id="myAreaChart"></canvas>
                   </div>
                 </div>
@@ -198,13 +205,13 @@
                   </div>
                   <div class="mt-4 text-center small">
                     <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> ${hvo.mon_pie_incom.get(0).division}
+                      		<i class="fas fa-circle text-primary"></i> ${hvo.mon_pie_incom.get(0).division}
                     </span>
                     <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> ${hvo.mon_pie_incom.get(1).division}
+                      		<i class="fas fa-circle text-success"></i> ${hvo.mon_pie_incom.get(1).division}
                     </span>
                     <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> ${hvo.mon_pie_incom.get(2).division}
+                      		<i class="fas fa-circle text-info"></i> ${hvo.mon_pie_incom.get(2).division}
                     </span>
                   </div>
                 </div>
@@ -224,26 +231,14 @@
                   <h6 class="m-0 font-weight-bold text-primary">지출 순위</h6>
                 </div>
                 <div class="card-body">
-                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(0).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(0).money/hvo.mon_incom}" type="percent"/></span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(0).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(1).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(1).money/hvo.mon_incom}" type="percent"/></span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(1).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(2).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(2).money/hvo.mon_incom}" type="percent"/></span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(2).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(3).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(3).money/hvo.mon_incom}" type="percent"/></span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(3).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(4).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(4).money/hvo.mon_incom}" type="percent"/></span></h4>
-                  <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(4).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
+                	<c:if test="${ranknum != 0 }">
+                	<c:forEach begin="0" end="${ranknum-1}" varStatus="stat">
+                		<h4 class="small font-weight-bold">${hvo.mon_bar_incom.get(stat.index).division} <span class="float-right"><fmt:formatNumber value="${hvo.mon_bar_incom.get(stat.index).money/hvo.mon_incom}" type="percent"/></span></h4>
+		                  <div class="progress mb-4">
+		                    <div class="progress-bar ${starr[stat.index] }" role="progressbar" style="width: <fmt:formatNumber value="${hvo.mon_bar_incom.get(stat.index).money/hvo.mon_incom}" type="percent"/>" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+		                  </div>
+                	</c:forEach>
+                	</c:if>
                 </div>
               </div>
 
@@ -253,46 +248,18 @@
             <div class="col-lg-6 mb-4">
 			<!-- Color System -->
               <div class="row">
-              <div class="col-lg-6 mb-4">
-                  <div class="card bg-danger text-white shadow">
-                    <div class="card-body">
-                      ${hvo.mon_bar_incom.get(0).division}
-                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(0).money}" pattern="#,###" />원</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-warning text-white shadow">
-                    <div class="card-body">
-                      ${hvo.mon_bar_incom.get(1).division}
-                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(1).money}" pattern="#,###" />원</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-primary text-white shadow">
-                    <div class="card-body">
-                      ${hvo.mon_bar_incom.get(2).division}
-                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(2).money}" pattern="#,###" />원</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-info text-white shadow">
-                    <div class="card-body">
-                      ${hvo.mon_bar_incom.get(3).division}
-                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(3).money}" pattern="#,###" />원</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-success text-white shadow">
-                    <div class="card-body">
-                      ${hvo.mon_bar_incom.get(4).division}
-                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(4).money}" pattern="#,###" />원</div>
-                    </div>
-                  </div>
-                </div>
+              	<c:if test="${ranknum != 0 }">
+              	<c:forEach begin="0" end="${ranknum-1}" varStatus="stat">
+	              	<div class="col-lg-6 mb-4">
+	                  <div class="card ${cardarr[stat.index] } text-white shadow">
+	                    <div class="card-body">
+	                      ${hvo.mon_bar_incom.get(stat.index).division}
+	                      <div class="text-white-50 small"><fmt:formatNumber value="${hvo.mon_bar_incom.get(stat.index).money}" pattern="#,###" />원</div>
+	                    </div>
+	                  </div>
+	                </div>
+              	</c:forEach>
+              	</c:if>
               </div>
              
           </div>

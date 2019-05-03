@@ -12,7 +12,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">가계부 프로그램</div>
+        <div class="sidebar-brand-text mx-3">가계부 사이트</div>
       </a>
 
       <!-- Divider -->

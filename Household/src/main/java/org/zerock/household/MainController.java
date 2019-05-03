@@ -343,14 +343,10 @@ public class MainController {
 	
 	@PostMapping("/passwordchange")
 	public @ResponseBody String passwordchange(String email,String newpassword) {
-//		int passcheck = service.passCheck(email,password);
-//		if(passcheck == 1) {
 			int num = service.getMembernum(email);
 			service.passupdate(num,newpassword);
 			logger.info("비밀번호 변경 완료.");
 			return "1";
-//		}
-//		return "0";
 	}
 	
 	@PostMapping("/incomeInsert")
@@ -362,7 +358,7 @@ public class MainController {
 	@GetMapping("/chartForm")
 	public String chartForm(HomeVO vo, Model mo) {
 		Calendar cal = Calendar.getInstance();
-		String nowmon = String.valueOf(3);
+		String nowmon = String.valueOf(cal.get(cal.MONTH)+1);
 		vo.setNowmonth(nowmon);
 		if(vo.getMembernum() == 0) {
 			index(mo);
@@ -377,6 +373,13 @@ public class MainController {
 		mo.addAttribute("hvo", hvo);
 		mo.addAttribute("nowmon", nowmon);
 		mo.addAttribute("selectmon", Integer.parseInt(vo.getMonth()));
+		mo.addAttribute("ranknum", hvo.getRanknum());
+		//지출순위 스타일 배열
+		String[] starr = {"bg-danger","bg-warning","","bg-info","bg-success"};
+		mo.addAttribute("starr", starr);
+		//지출카드 스타일배열
+		String[] cardarr = {"bg-danger","bg-warning","bg-primary","bg-info","bg-success"};
+		mo.addAttribute("cardarr", cardarr);
 		return "chart/chart";
 	}
 	

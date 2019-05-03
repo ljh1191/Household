@@ -25,7 +25,8 @@ public interface MainMapper {
 	public List<HouseholdVO> tableList(int membernum);
 	public int getIncome(HomeVO vo);
 	public int getDx(HomeVO vo);
-	public int getMonthincome(HashMap<String, Object> hm);
+	public String getMonthincome(HashMap<String, Object> hm);
+	public int pieCheck(HomeVO vo);
 	public ArrayList<HouseholdVO> pieRank(HomeVO vo);
 	public ArrayList<HouseholdVO> barRank(HomeVO vo);
 	public void viewUpdate(HouseholdVO vo);

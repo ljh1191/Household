@@ -99,8 +99,17 @@ public class MainServiceImpl implements MainService{
 	@Override
 	public HomeVO homegetData(HomeVO vo) {
 		// TODO Auto-generated method stub
-		vo.setMon_incom(mapper.getIncome(vo));
-		vo.setMon_dx(mapper.getDx(vo));
+		try {
+			vo.setMon_incom(mapper.getIncome(vo));
+		} catch (Exception e) {
+			vo.setMon_incom(0);
+		}
+		
+		try {
+			vo.setMon_dx(mapper.getDx(vo));
+		} catch (Exception e) {
+			vo.setMon_dx(0);
+		}
 		int nowmon_num = Integer.parseInt(vo.getNowmonth());
 		//해당월까지의 배열생성
 		String[] mon = new String[nowmon_num];
@@ -109,26 +118,39 @@ public class MainServiceImpl implements MainService{
 				mon[i-1] = "0".concat(String.valueOf(i));
 			}else {
 				mon[i-1] = String.valueOf(i);
-				
 			}
 		}
 		HashMap<String, Object> hm = new HashMap<String, Object>();
 		hm.put("membernum", vo.getMembernum());
 		//해당월까지 지출 배열에 넣음
 		int[] mon_income = new int[mon.length];
-		
-		for (int i = 0; i < mon.length; i++) {
-			hm.put("mon", mon[i]);
-			mon_income[i] = mapper.getMonthincome(hm);
+		for (int i = 0; i < mon_income.length; i++) {
+				hm.put("mon", mon[i]);
+				String mon_in = mapper.getMonthincome(hm);
+				if(mon_in == null) {
+					mon_income[i] = 0;
+				}else {
+					mon_income[i] = Integer.parseInt(mon_in);
+				}
 		}
 		vo.setMon_area_incom(mon_income);
+		int IncomeNum = mapper.pieCheck(vo);
 		//pie chart 데이터
-		ArrayList<HouseholdVO> arr = mapper.pieRank(vo);
-		vo.setMon_pie_incom(arr);
+		if(IncomeNum >= 3) {
+			ArrayList<HouseholdVO> arr = mapper.pieRank(vo);
+			vo.setMon_pie_incom(arr);
+		}
 		//bar chart 데이터
-		ArrayList<HouseholdVO> arr2 = mapper.barRank(vo);
-		
-		vo.setMon_bar_incom(arr2);
+		if(IncomeNum >= 5) {
+			vo.setRanknum(5);
+			ArrayList<HouseholdVO> arr2 = mapper.barRank(vo);
+			vo.setMon_bar_incom(arr2);
+		}
+		if(IncomeNum < 5 && IncomeNum != 0) {
+			vo.setRanknum(IncomeNum);
+			ArrayList<HouseholdVO> arr2 = mapper.barRank(vo);
+			vo.setMon_bar_incom(arr2);
+		}
 		return vo;
 	}
 

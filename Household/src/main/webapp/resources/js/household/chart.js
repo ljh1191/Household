@@ -13,3 +13,9 @@ function mondropdownBtn(num){
 	
 	location.href = "/household/main/chartForm?membernum="+$("#membernum").val()+"&month="+str;
 }
+$(document).ready(function(){
+	if($("#mon_dx").val()==0){
+		alert("지출내역이 없습니다.");
+		return false;
+	}
+});

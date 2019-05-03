@@ -11,7 +11,14 @@ public class HomeVO {
 	private int[] mon_area_incom;
 	private ArrayList<HouseholdVO> mon_pie_incom;
 	private ArrayList<HouseholdVO> mon_bar_incom;
+	private int ranknum;
 	
+	public int getRanknum() {
+		return ranknum;
+	}
+	public void setRanknum(int ranknum) {
+		this.ranknum = ranknum;
+	}
 	public String getMonth() {
 		return month;
 	}
